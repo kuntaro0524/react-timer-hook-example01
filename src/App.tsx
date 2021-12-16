@@ -49,6 +49,7 @@ export default function App() {
   return (
     <div>
       <MyTimer expiryTimestamp={(time as unknown) as number} />
+      <MyTimer expiryTimestamp={(time as unknown) as number} isSecond={true} />
     </div>
   );
 }
