@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useTimer } from "react-timer-hook";
+
+import { SwitchProvider, SwitchContext } from "./SwitchProvider";
 
 function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
   const {
@@ -17,6 +19,15 @@ function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
     onExpire: () => console.warn("onExpire called")
   });
 
+  // タイマーがアクティブな常態かどうかの判定を行う
+  const { switchInfo, setSwitchInfo } = useContext(SwitchContext);
+  console.log(switchInfo);
+
+  const onClickPause = () => {
+    setSwitchInfo({ isActive: !switchInfo.isActive });
+    pause();
+  };
+
   return (
     <div style={{ textAlign: "center" }}>
       <h1>react-timer-hook </h1>
@@ -27,13 +38,13 @@ function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
       </div>
       <p>{isRunning ? "Running" : "Not running"}</p>
       <button onClick={start}>Start</button>
-      <button onClick={pause}>Pause</button>
+      <button onClick={onClickPause}>Pause</button>
       <button onClick={resume}>Resume</button>
       <button
         onClick={() => {
           // Restarts to 5 minutes timer
           const time = new Date();
-          time.setSeconds(time.getSeconds() + 25 * 60);
+          time.setSeconds(time.getSeconds() + 25);
           restart((time as unknown) as number);
         }}
       >
@@ -45,11 +56,14 @@ function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
 
 export default function App() {
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
+  time.setSeconds(time.getSeconds() + 1500); // 10 minutes timer
+
   return (
-    <div>
-      <MyTimer expiryTimestamp={(time as unknown) as number} />
-      <MyTimer expiryTimestamp={(time as unknown) as number} isSecond={true} />
-    </div>
+    <SwitchProvider>
+      <div>
+        <MyTimer expiryTimestamp={(time as unknown) as number} />
+        <MyTimer expiryTimestamp={(time as unknown) as number} />
+      </div>
+    </SwitchProvider>
   );
 }
