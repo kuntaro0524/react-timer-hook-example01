@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useTimer } from "react-timer-hook";
-
+import useSound from "use-sound";
+import Sound from "./alert.mp3";
 import { SwitchProvider, SwitchContext } from "./SwitchProvider";
 
 function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
@@ -23,6 +24,10 @@ function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
   const { switchInfo, setSwitchInfo } = useContext(SwitchContext);
   console.log(switchInfo);
 
+  const [play] = useSound(Sound);
+
+  isRunning ? console.log("running") : play();
+
   const onClickPause = () => {
     setSwitchInfo({ isActive: !switchInfo.isActive });
     pause();
@@ -44,7 +49,7 @@ function MyTimer({ expiryTimestamp }: { expiryTimestamp: number }) {
         onClick={() => {
           // Restarts to 5 minutes timer
           const time = new Date();
-          time.setSeconds(time.getSeconds() + 25);
+          time.setSeconds(time.getSeconds() + 1500);
           restart((time as unknown) as number);
         }}
       >
@@ -61,7 +66,6 @@ export default function App() {
   return (
     <SwitchProvider>
       <div>
-        <MyTimer expiryTimestamp={(time as unknown) as number} />
         <MyTimer expiryTimestamp={(time as unknown) as number} />
       </div>
     </SwitchProvider>
