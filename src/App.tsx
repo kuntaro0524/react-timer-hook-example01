@@ -67,6 +67,7 @@ export default function App() {
     <SwitchProvider>
       <div>
         <MyTimer expiryTimestamp={(time as unknown) as number} />
+        {/* <MyTimer limit={300} expiryTimestamp={(time as unknown) as number} /> */}
       </div>
     </SwitchProvider>
   );
